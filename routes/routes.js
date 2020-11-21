@@ -11,7 +11,7 @@ router.use(shopRoutes);
 router.use(authRoutes);
 
 router.use((req, res, next) => {
-  res.status(404).render("404", { isLoggedIn: req.session.isLoggedIn });
+  res.status(404).render("404");
 });
 
 module.exports = router;

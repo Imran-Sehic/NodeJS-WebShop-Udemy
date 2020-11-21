@@ -32,6 +32,21 @@ li a:hover {
     color: rgb(180, 50, 180);
 }
 
+nav ul li form button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+nav ul li form button:hover,
+nav ul li form button:active {
+    color: rgb(180, 50, 180);
+    outline: none;
+}
+
+
 main {
     text-align: center;
 }

@@ -19,7 +19,10 @@
             </ul>
             <ul>
                 <li>
-                    <a href="/logout">Logout</a>
+                    <form action="/logout" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit">Logout</button>
+                    </form>
                 </li>
             </ul>
         </nav>
@@ -37,6 +40,7 @@
                 <p><%= prod.description %></p>
                 <p>Quantity: <%= prod.cartItem.quantity %></p>
                 <form action="/delete-product" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <input type="hidden" name="id" value="<%= prod.id %>">
                     <button type="submit">Delete</button>
                 </form>

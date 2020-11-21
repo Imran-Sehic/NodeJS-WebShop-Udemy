@@ -11,8 +11,7 @@ router.get("/", (req, res, next) => {
   Product.findAll()
     .then((prods) => {
       res.render("shop", {
-        products: prods,
-        isLoggedIn: req.session.isLoggedIn,
+        products: prods
       });
     })
     .catch((err) => {

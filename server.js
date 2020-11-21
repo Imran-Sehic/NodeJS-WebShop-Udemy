@@ -8,6 +8,8 @@ const User = require("./models/user");
 const Cart = require("./models/cart");
 const CartItem = require("./models/cart-item");
 const session = require("express-session");
+const csrf = require("csurf");
+const flash = require("connect-flash");
 const MySQLStore = require("express-mysql-session")(session);
 
 const app = express();
@@ -19,6 +21,8 @@ var store = new MySQLStore({
   password: "root",
   database: "node-products"
 });
+
+const csrfProtection = csrf();
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -34,6 +38,9 @@ app.use(
   })
 );
 
+app.use(csrfProtection);
+app.use(flash());
+
 app.use((req, res, next) => {
   if(!req.session.user) {
     return next();
@@ -48,6 +55,12 @@ app.use((req, res, next) => {
     });
 });
 
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+})
+
 app.use(routes);
 
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
@@ -59,28 +72,6 @@ Product.belongsToMany(Cart, { through: CartItem });
 
 sequelize
   .sync()
-  /*.then(() => {
-    return User.findByPk(1);
-  })
-  .then((user) => {
-    if (!user) {
-      return User.create({ email: "imran@hotmail.com", password: "imranbudala" });
-    }
-    return user;
-  })
-  .then((user) => {
-    return user
-      .getCart()
-      .then((cart) => {
-        if (!cart) {
-          return user.createCart();
-        }
-        return user.getCart();
-      })
-      .catch((err) => {
-        console.log(error);
-      });
-  })*/
   .then(() => {
     app.listen(3000, () => {
       console.log("server started");

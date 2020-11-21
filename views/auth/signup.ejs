@@ -31,6 +31,7 @@
             <input type="text" name="email" placeholder="email"><br><br>
             <input type="password" name="password" placeholder="password"><br><br>
             <input type="password" name="repeatPassword" placeholder="repeat password"><br><br>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button type="submit">Signup</button>
         </form>
     </main>

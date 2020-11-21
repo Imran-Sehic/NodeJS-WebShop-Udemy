@@ -29,7 +29,10 @@
                 </li>
                 <% } else { %>
                 <li>
-                    <a href="/logout">Logout</a>
+                    <form action="/logout" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit">Logout</button>
+                    </form>
                 </li>
                 <% } %>
             </ul>
@@ -48,6 +51,7 @@
                 <p><%= prod.description %></p>
                 <% if(isLoggedIn) { %>
                 <form action="/buy-product" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <input type="hidden" name="id" value="<%= prod.id %>">
                     <button type="submit">Buy</button>
                 </form>

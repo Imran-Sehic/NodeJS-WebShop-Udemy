@@ -34,13 +34,16 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.get("/login", (req, res, next) => {
-  res.render("auth/login");
+  res.render("auth/login", {
+    error: req.flash('error')
+  });
 });
 
 router.post("/login", (req, res, next) => {
   User.findOne({ where: { email: req.body.email } })
     .then((user) => {
       if (!user) {
+        req.flash('error', 'Invalid credentials!');
         return res.redirect("/login");
       }
       bcrypt
@@ -54,6 +57,7 @@ router.post("/login", (req, res, next) => {
               res.redirect("/");
             });
           }
+          req.flash('error', 'Invalid credentials!');
           res.redirect("/login");
         })
         .catch((err) => {
@@ -66,7 +70,7 @@ router.post("/login", (req, res, next) => {
     });
 });
 
-router.get("/logout", (req, res, next) => {
+router.post("/logout", (req, res, next) => {
   req.session.destroy((err) => {
     res.redirect("/");
   });
