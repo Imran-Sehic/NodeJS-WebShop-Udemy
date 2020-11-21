@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const rootPath = require("../util/path");
+const isAuth = require('../middleware/is-auth');
 const Product = require("../models/product");
 const User = require("../models/user");
 const Cart = require("../models/cart");
@@ -19,7 +20,7 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.post("/buy-product", (req, res, next) => {
+router.post("/buy-product", isAuth, (req, res, next) => {
   let fetchedCart;
   let newQuantity = 1;
   req.user
@@ -54,7 +55,7 @@ router.post("/buy-product", (req, res, next) => {
     });
 });
 
-router.get("/cart", (req, res, next) => {
+router.get("/cart", isAuth, (req, res, next) => {
   req.user
     .getCart()
     .then((cart) => {
@@ -70,7 +71,7 @@ router.get("/cart", (req, res, next) => {
     });
 });
 
-router.post("/delete-product", (req, res, next) => {
+router.post("/delete-product", isAuth, (req, res, next) => {
   let userCart;
   req.user
     .getCart()

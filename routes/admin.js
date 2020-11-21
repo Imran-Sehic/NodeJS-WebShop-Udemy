@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const isAuth = require('../middleware/is-auth');
 
-router.get("/add-products", (req, res, next) => {
+router.get("/add-products", isAuth, (req, res, next) => {
   res.render("add-product");
 });
 
-router.get("/products", (req, res, next) => {
+router.get("/products", isAuth, (req, res, next) => {
   req.user
     .getProducts()
     .then(products => {
@@ -18,7 +19,7 @@ router.get("/products", (req, res, next) => {
     });
 });
 
-router.post("/products", (req, res, next) => {
+router.post("/products", isAuth, (req, res, next) => {
   req.user
     .createProduct({
       title: req.body.title,
