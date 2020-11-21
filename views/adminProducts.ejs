@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Shop</a></li>
+                <li><a href="/cart">Cart</a></li>
+                <li><a href="/admin/add-products">Add Products</a></li>
+                <li><a href="/admin/products">Admin Products</a></li>
+            </ul>
+            <ul>
+                <li>
+                    <a href="/logout">Logout</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <% if(products.length > 0) { %>
+        <h1>Here are the products you added!</h1>
+        <div class="product-list">
+            <% for (let prod of products) { %>
+            <div class="product">
+                <h4><%= prod.title %></h4>
+                <img src="<%= prod.imageUrl %>" alt="bike image">
+                <h4><%= prod.price %>$</h4>
+                <p><%= prod.description %></p>
+            </div>
+            <% } %>
+        </div>
+        <% } else { %>
+            <h1>You did not add any product!</h1>
+        <% } %>
+    </main>
+</body>
+
+</html>

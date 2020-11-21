@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/form.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Shop</a></li>
+                <li><a href="/cart">Cart</a></li>
+                <li><a href="/admin/add-products">Add Products</a></li>
+                <li><a href="/admin/products">Admin Products</a></li>
+            </ul>
+            <ul>
+                <li>
+                    <a href="/logout">Logout</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <form action="/admin/products" method="POST">
+            <h2>Add a product!</h2>
+            <input type="text" name="title" placeholder="title"><br><br>
+            <input type="number" step="0.01" name="price" placeholder="price"><br><br>
+            <input type="text" name="imageUrl" placeholder="image url"><br><br>
+            <textarea name="description" rows="10" placeholder="description"></textarea><br><br>
+            <button type="submit">Add</button>
+        </form>
+    </main>
+</body>
+
+</html>
