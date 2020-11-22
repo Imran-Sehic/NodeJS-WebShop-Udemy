@@ -8,7 +8,7 @@ router.get("/add-products", isAuth, (req, res, next) => {
 
 router.get("/products", isAuth, (req, res, next) => {
   req.user
-    .getProducts()
+    .getProducts({where: {userId: req.user.id}})
     .then(products => {
       res.render('adminProducts', {
         products: products
