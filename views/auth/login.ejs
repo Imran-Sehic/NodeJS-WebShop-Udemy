@@ -28,8 +28,8 @@
     <main>
         <form action="/login" method="POST">
             <h2>Login</h2>
-            <input type="text" name="email" placeholder="email"><br><br>
-            <input type="password" name="password" placeholder="password"><br><br>
+            <input type="email" name="email" placeholder="email" value="<%= oldInput.email %>"><br><br>
+            <input type="password" name="password" placeholder="password" value="<%= oldInput.password %>"><br><br>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button type="submit">Login</button>
         </form>

@@ -12,7 +12,7 @@ input, textarea {
     font-size: 20px;
 }
 
-button {
+main button {
     background: rgb(255, 217, 0);
     border: 2px solid black;
     font-size: 20px;
@@ -20,7 +20,7 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+main button:hover {
     color: rgb(255, 217, 0);
     background: black;
 }

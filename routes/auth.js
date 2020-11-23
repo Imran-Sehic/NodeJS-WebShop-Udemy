@@ -1,53 +1,108 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const { check, body, validationResult } = require("express-validator/check");
 const User = require("../models/user");
 
 router.get("/signup", (req, res, next) => {
-  res.render("auth/signup");
+  res.render("auth/signup", {
+    error: "",
+    oldInput: {
+      email: "",
+      password: "",
+      repeatPassword: "",
+    },
+  });
 });
 
-router.post("/signup", (req, res, next) => {
-  User.findOne({ where: { email: req.body.email } })
-    .then((u) => {
-      if (u) {
-        return res.redirect("/signup");
+router.post(
+  "/signup",
+  [
+    body("password", "password should be at least 6 characters long!")
+      .isLength({
+        min: 6,
+      }).trim(),
+    body("repeatPassword").trim().custom((value, { req }) => {
+      if (value.trim() !== req.body.password) {
+        throw new Error("Passwords have to match!");
       }
-      return bcrypt
-        .hash(req.body.password, 12)
-        .then((hashedPassword) => {
-          return User.create({
-            email: req.body.email,
-            password: hashedPassword,
+      return true;
+    }),
+  ],
+  (req, res, next) => {
+    const email = req.body.email.trim();
+    const password = req.body.password;
+    const repeatPassword = req.body.repeatPassword;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).render("auth/signup", {
+        error: errors.array()[0].msg,
+        oldInput: {
+          email: email,
+          password: password,
+          repeatPassword: repeatPassword,
+        },
+      });
+    }
+    User.findOne({ where: { email: email } })
+      .then((u) => {
+        if (u) {
+          return res.status(422).render("auth/signup", {
+            error: "email already exists!",
+            oldInput: {
+              email: email,
+              password: password,
+              repeatPassword: repeatPassword,
+            },
           });
-        })
-        .then((user) => {
-          return user.createCart();
-        })
-        .then(() => {
-          return res.redirect("/login");
-        });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+        }
+        return bcrypt
+          .hash(password, 12)
+          .then((hashedPassword) => {
+            return User.create({
+              email: email,
+              password: hashedPassword,
+            });
+          })
+          .then((user) => {
+            return user.createCart();
+          })
+          .then(() => {
+            return res.redirect("/login");
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+);
 
 router.get("/login", (req, res, next) => {
   res.render("auth/login", {
-    error: req.flash('error')
+    error: "",
+    oldInput: {
+      email: "",
+      password: "",
+    },
   });
 });
 
 router.post("/login", (req, res, next) => {
-  User.findOne({ where: { email: req.body.email } })
+  const email = req.body.email.trim();
+  const password = req.body.password.trim();
+  User.findOne({ where: { email: email } })
     .then((user) => {
       if (!user) {
-        req.flash('error', 'Invalid credentials!');
-        return res.redirect("/login");
+        return res.status(422).render("auth/login", {
+          error: "Invalid credentials!",
+          oldInput: {
+            email: email,
+            password: password,
+          },
+        });
       }
       bcrypt
-        .compare(req.body.password, user.password)
+        .compare(password, user.password)
         .then((doMatch) => {
           if (doMatch) {
             req.session.isLoggedIn = true;
@@ -57,8 +112,13 @@ router.post("/login", (req, res, next) => {
               res.redirect("/");
             });
           }
-          req.flash('error', 'Invalid credentials!');
-          res.redirect("/login");
+          return res.status(422).render("auth/login", {
+            error: "Invalid credentials!",
+            oldInput: {
+              email: email,
+              password: password,
+            },
+          });
         })
         .catch((err) => {
           console.log(err);
