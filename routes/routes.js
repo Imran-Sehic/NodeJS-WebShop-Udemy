@@ -11,7 +11,11 @@ router.use(shopRoutes);
 router.use(authRoutes);
 
 router.use((req, res, next) => {
-  res.status(404).render("404");
+  res.status(404).render("error/404");
+});
+
+router.use((error, req, res, next) => {
+  res.status(500).render("error/500");
 });
 
 module.exports = router;

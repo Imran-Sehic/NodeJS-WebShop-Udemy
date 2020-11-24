@@ -15,7 +15,7 @@ router.get("/products", isAuth, (req, res, next) => {
       })
     })
     .catch((err) => {
-      console.log(err);
+      return next(new Error(err));
     });
 });
 
@@ -31,7 +31,7 @@ router.post("/products", isAuth, (req, res, next) => {
       res.redirect("/");
     })
     .catch((err) => {
-      console.log(err);
+      return next(new Error(err));
     });
 });
 

@@ -72,7 +72,7 @@ router.post(
           });
       })
       .catch((err) => {
-        console.log(err);
+        return next(new Error(err));
       });
   }
 );
@@ -121,12 +121,11 @@ router.post("/login", (req, res, next) => {
           });
         })
         .catch((err) => {
-          console.log(err);
-          res.redirect("/login");
+          return next(new Error(err));
         });
     })
     .catch((err) => {
-      console.log(err);
+      return next(new Error(err));
     });
 });
 

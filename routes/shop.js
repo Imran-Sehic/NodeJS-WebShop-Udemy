@@ -15,7 +15,7 @@ router.get("/", (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      return next(new Error(err));
     });
 });
 
@@ -50,7 +50,7 @@ router.post("/buy-product", isAuth, (req, res, next) => {
       res.redirect("/cart");
     })
     .catch((err) => {
-      console.log(err);
+      return next(new Error(err));
     });
 });
 
@@ -66,7 +66,7 @@ router.get("/cart", isAuth, (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      return next(new Error(err));
     });
 });
 
@@ -85,7 +85,7 @@ router.post("/delete-product", isAuth, (req, res, next) => {
       res.redirect("/");
     })
     .catch((err) => {
-      console.log(err);
+      return next(new Error(err));
     });
 });
 
