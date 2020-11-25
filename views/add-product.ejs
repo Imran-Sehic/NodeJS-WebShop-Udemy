@@ -30,15 +30,18 @@
     </header>
 
     <main>
-        <form action="/admin/products" method="POST">
+        <form action="/admin/products" method="POST" enctype="multipart/form-data">
             <h2>Add a product!</h2>
-            <input type="text" name="title" placeholder="title"><br><br>
-            <input type="number" step="0.01" name="price" placeholder="price"><br><br>
-            <input type="text" name="imageUrl" placeholder="image url"><br><br>
-            <textarea name="description" rows="10" placeholder="description"></textarea><br><br>
+            <input type="text" name="title" placeholder="title" value="<%= oldInput.title %>"><br><br>
+            <input type="number" step="0.01" name="price" placeholder="price" value="<%= oldInput.price %>"><br><br>
+            <input type="file" name="image"><br><br>
+            <textarea name="description" rows="10" placeholder="description"><%= oldInput.description %></textarea><br><br>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button type="submit">Add</button>
         </form>
+        <% if(error) { %>
+            <p style="color: red;"><%= error %></p>
+        <% } %>
     </main>
 </body>
 
