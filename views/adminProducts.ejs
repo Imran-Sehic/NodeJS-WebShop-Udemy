@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/form.css">
     <title>Document</title>
 </head>
 
@@ -38,6 +39,11 @@
                 <img src="/<%= prod.imageUrl %>" alt="image">
                 <h4><%= prod.price %>$</h4>
                 <p><%= prod.description %></p>
+                <form action="/admin/delete-product" method="POST">
+                    <input type="hidden" name="productId" value="<%= prod.id %>">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit">Delete</button>
+                </form>
             </div>
             <% } %>
         </div>

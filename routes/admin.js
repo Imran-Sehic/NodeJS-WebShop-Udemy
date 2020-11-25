@@ -1,16 +1,18 @@
 const express = require("express");
 const router = express.Router();
+const Product = require("../models/product");
 const { body, validationResult } = require("express-validator/check");
 const isAuth = require("../middleware/is-auth");
+const fileHelper = require('../util/file');
 
 router.get("/add-products", isAuth, (req, res, next) => {
   res.render("add-product", {
-    error: '',
+    error: "",
     oldInput: {
-      title: '',
+      title: "",
       price: null,
-      description: ''
-    }
+      description: "",
+    },
   });
 });
 
@@ -37,7 +39,7 @@ router.post(
       })
       .trim(),
     body("price", "Enter a price please!").isLength({
-      min: 1
+      min: 1,
     }),
     body("description", "description should be at least 10 characters long!")
       .isLength({
@@ -84,5 +86,22 @@ router.post(
       });
   }
 );
+
+router.post("/delete-product", isAuth, (req, res, next) => {
+  Product.findByPk(req.body.productId)
+    .then(product => {
+      if(!product) {
+        return next(new Error('Product not found!'));
+      }
+      fileHelper.deleteFile(product.imageUrl);
+      return Product.destroy({ where: { id: req.body.productId } });
+    })
+    .then(() => {
+      res.redirect("/admin/products");
+    })
+    .catch((err) => {
+      next(new Error(err));
+    });
+});
 
 exports.routes = router;
