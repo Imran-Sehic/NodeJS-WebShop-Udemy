@@ -7,6 +7,24 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/form.css">
     <title>Document</title>
+    <style>
+        .order-item {
+            display: flex;
+            justify-content: space-around;
+            font-weight: bold;
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        main p {
+            text-align: left;
+            margin-left: 5px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
 </head>
 
 <body>
@@ -31,28 +49,18 @@
 
     <main>
         <% if(products.length > 0) { %>
-        <h1>Here are the products in the cart!</h1>
-        <div style="background: black; color: rgb(255, 217, 0); padding: 2px; margin: 5px">
-            <p>Order your products now! <a href="/order" style="color: rgb(255, 217, 0)">ORDER</a></p>
-        </div>
-        <div class="product-list">
+        <div>
             <% for (let prod of products) { %>
-            <div class="product">
-                <h4><%= prod.title %></h4>
-                <img src="/<%= prod.imageUrl %>" alt="image">
-                <h4><%= prod.price %>$</h4>
-                <p><%= prod.description %></p>
-                <p>Quantity: <%= prod.cartItem.quantity %></p>
-                <form action="/delete-product" method="POST">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <input type="hidden" name="id" value="<%= prod.id %>">
-                    <button type="submit">Delete</button>
-                </form>
+            <div class="order-item">
+                <span><%= prod.title %></span>
+                <span><%= prod.price %>$</span>
+                <span>Quantity: <%= prod.cartItem.quantity %></span>
+                <span>total: <%= prod.price * prod.cartItem.quantity %>$</span>
             </div>
             <% } %>
         </div>
-        <% } else { %>
-            <h1>No products in your cart!</h1>
+        <p>Total number of items: <%= totalItems %></p>
+        <p>Total price: <%= totalPrice %>$</p>
         <% } %>
     </main>
 </body>

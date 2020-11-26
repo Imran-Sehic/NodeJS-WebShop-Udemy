@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const rootPath = require("../util/path");
-const isAuth = require('../middleware/is-auth');
+const isAuth = require("../middleware/is-auth");
 const Product = require("../models/product");
 const User = require("../models/user");
 const Cart = require("../models/cart");
@@ -11,7 +11,7 @@ router.get("/", (req, res, next) => {
   Product.findAll()
     .then((prods) => {
       res.render("shop", {
-        products: prods
+        products: prods,
       });
     })
     .catch((err) => {
@@ -83,6 +83,30 @@ router.post("/delete-product", isAuth, (req, res, next) => {
     })
     .then(() => {
       res.redirect("/");
+    })
+    .catch((err) => {
+      return next(new Error(err));
+    });
+});
+
+router.get("/order", isAuth, (req, res, next) => {
+  let totalPrice = 0;
+  let totalItems = 0;
+  req.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts();
+    })
+    .then((products) => {
+      products.forEach(prod => {
+        totalPrice += prod.cartItem.quantity * prod.price;
+        totalItems += prod.cartItem.quantity;
+      })
+      res.render("order", {
+        totalPrice: totalPrice,
+        totalItems: totalItems,
+        products: products
+      })
     })
     .catch((err) => {
       return next(new Error(err));
