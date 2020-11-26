@@ -61,6 +61,19 @@
         </div>
         <p>Total number of items: <%= totalItems %></p>
         <p>Total price: <%= totalPrice %>$</p>
+        <div>
+            <button id="order-button">Order</button>
+            <script src="https://js.stripe.com/v3/"></script>
+            <script>
+                var stripe = Stripe('pk_test_51HromeDApknmWwAEALQgdWuekmlLJSsFRkEAzrbMj4Qf7Y0Q3749z1K89LzHGreDOzrFO4uf8VbTsWULSnjnE17t001pP2aZCJ');
+                var orderBtn = document.getElementById('order-button');
+                orderBtn.addEventListener('click', function() {
+                    stripe.redirectToCheckout({
+                        sessionId: '<%= sessionId %>'
+                    });
+                });
+            </script>
+        </div>
         <% } %>
     </main>
 </body>
